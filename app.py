@@ -12,4 +12,4 @@ def designer():
     
 @app.route('/map')
 def map():
-    return 'This is map page'
+    return render_template('maps.html')
