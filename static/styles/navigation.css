@@ -21,7 +21,7 @@ li a {
     width: 200px;
     padding: 20px 20px;
     text-decoration: none;
-    font: sans-serif;
+    font-family: sans-serif;
 }
 
 /* Change the link color to #111 (black) on hover */
