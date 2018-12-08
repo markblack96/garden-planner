@@ -8,7 +8,7 @@ def index():
     
 @app.route('/designer')
 def designer():
-    return 'This is design page'
+    return render_template('design.html') 
     
 @app.route('/map')
 def map():
