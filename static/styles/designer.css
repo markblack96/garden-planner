@@ -1,0 +1,8 @@
+/* CSS for svg elements
+*/
+
+rect.selected {
+    stroke: blue;
+    stroke-dasharray: 2px;
+}
+

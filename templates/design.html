@@ -1,9 +1,36 @@
-<!doctype html>
+<!DOCTYPE html>
 <head>
 <title>Garden Planner</title>
+<!-- d3 import -->
+<script src="https://d3js.org/d3.v4.min.js"></script>
 </head>
 <body>
-<h3>Designer</h3>
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='styles/main.css')}}">
 {% include 'navigation.html' %}
-<p>More to come</p>
+<h3>Designer</h3>
+<style>
+svg {
+  background-color: #f0f0f0;
+}
+.selected {
+  stroke: black;
+  stroke-dasharray: 4px;
+  fill: #f0f0f0;
+}
+</style>
+<div id="svg-container">
+
+</div>
+<div id="options-container">
+<ul id="options">
+<li><input type="radio" name="options" id="drag" checked>Drag</li>
+<li><input type="radio" name="options" id="resize">Resize</li>
+<li><input type="radio" name="options" id="draw">Add new container</li>
+<li><input type="radio" name="options" id="draw_plot">Add new plot</li>
+</ul>
+</div>
+<script src="{{url_for('static', filename='scripts/app.js')}}"></script>
 </body>
+
+
+
