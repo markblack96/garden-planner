@@ -28,15 +28,18 @@ virtualenv is installed, you can create a virtual environment with the following
 			$ virtualenv venv
 
 # 2. Activate your virtual environment
--Purpose: The system-wide Python Interpretor is what is being modified when installing/changing Python packages. 
+- Purpose: The system-wide Python Interpretor is what is being modified when installing/changing Python packages. 
 
--Since we are already in the project directory we created in step 1.1, we can now use the activation function 
+- Since we are already in the project directory we created in step 1.1, we can now use the activation function 
 to turn-on and initialize the virtual environment:
-		OSX/Linux:	$ source venv/bin/activate
-		Windows:	$ venv\Scripts\activate
+- OSX/Linux:	
+		$ source venv/bin/activate
+- Windows:	
+		$ venv\Scripts\activate
 
 - The command above will return this new isolated python interpreter. (venv) is the name we gave the environment:
-		  	(venv) $ _
+		  
+		(venv) $ _
 
 # Now you are ready to install Flask and any other required packages using Python's package manager: pip
 
