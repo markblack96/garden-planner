@@ -1,11 +1,9 @@
 Garden Planner Official README.md page
 Collaborators: Ashton Hamm, Ethan Black, Clayton Conly, Pardhu Tadikonda
 
-===================================================================================================
-===================================================================================================
+==================================================================================
 #					Set up Virtual Environment:
-===================================================================================================
-===================================================================================================
+==================================================================================
 
 ## 1. Setup your virtual environment (IMPORTANT!!!)
 - Purpose: The system-wide Python Interpretor is what is being modified when installing/changing Python packages. 
@@ -55,11 +53,9 @@ the activated virtual environment.
 they will not persist when you close the terminal window. If you work with multiple terminal windows open at the same time, it 
 is perfectly fine to have different virtual environments activated on each one.
 
-===================================================================================================
-===================================================================================================
+==================================================================================
 #				How to run the Web Application:
-===================================================================================================
-===================================================================================================
+==================================================================================
 
 - First, your command prompt should be in the activated virtual environment for that web application. 
   Example of the activated virtual environment  from step 2:
