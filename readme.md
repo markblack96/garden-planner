@@ -19,14 +19,14 @@ to break unexpectedly.
 - NOTE:  If you are using a Python 3 version, virtual environment support is included in it, so all you 
 need to do to create one is this (replace name with your virtual environment's name):
 			
-	$ python3 -m venv name
+			$ python3 -m venv name
 
 - If you are using any version of Python older than 3.4 (and that includes the 2.7 release), virtual 
 environments are not supported natively. For those versions of Python, you need to download and 
 install a third-party tool called virtualenv before you can create virtual environments. Once 
 virtualenv is installed, you can create a virtual environment with the following command:
 		
-	$ virtualenv venv
+			$ virtualenv venv
 
 ## 2. Activate your virtual environment
 - Purpose: The system-wide Python Interpretor is what is being modified when installing/changing Python packages. 
