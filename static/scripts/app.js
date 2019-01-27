@@ -1,19 +1,60 @@
 // a string value such as "draw" or "drag"
 var selected_option = d3.select("input[name='options']:checked").property('value');
 
+var width = 640;
+var height = 480;
+var numTicks = 10; // used later for gridlines and snapping
+var resolution = 20;
 
-var svg = d3.select("#svg-container").append("svg").attr("width", "640px").attr("height", "480px");;
+var svg = d3.select("#svg-container").append("svg").attr("width", width).attr("height", height);
 
-var plots = []; // Array to hold garden plot objects
-
+// Arrays to hold garden plot objects
+var plots = []; 
 var circles = [];
 
 
+// Alternative to scale: just add a bunch of lines on the fly
+svg.selectAll('.vertical')
+    .data(d3.range(1, width/resolution)).enter().append("line")
+    .attr('class', 'vertical')
+    .attr('x1', function(d) { return d * resolution; })
+    .attr('y1', 0)
+    .attr('x2', function(d) { return d * resolution; })
+    .attr('y2', height)
+    .attr('stroke', '#000').attr('shapeRendering', 'crispEdges');
+    
+svg.selectAll('.horizontal')
+    .data(d3.range(1, height / resolution))
+  .enter().append('line')
+    .attr('class', 'horizontal')
+    .attr('x1', 0)
+    .attr('y1', function(d) { return d * resolution; })
+    .attr('x2', width)
+    .attr('y2', function(d) { return d * resolution; })
+    .attr('stroke', '#000').attr('shapeRendering', 'crispEdges');
+
+// Define scales and axes for grid
+//var x_scale = d3.scaleLinear().domain([0, 100]).range([0, width]);
+// var y_scale = d3.scaleLinear().domain([0, 100]).range([height, 0]);
+
+/*var x_gridlines = d3.axisTop()
+                    .tickFormat("") // no ticks
+                    .tickSize(-height) // tick all the way to bottom of the screen
+                    .scale(x_scale).ticks(numTicks);
+  */                  
+// var y_gridlines = d3.axisLeft().tickFormat("").tickSize(-width).scale(y_scale).ticks(numTicks);
+                    
+// add gridlines
+// svg.append("g").attr("class", "grid").call(x_gridlines);
+// svg.append("g").attr("class", "grid").call(y_gridlines);
+
+// adds circles from circle data
 svg.selectAll("circle").data(circles).enter().append("circle")
 	.attr("cx", function(d) { return (d.cx) })
 	.attr("cy", function(d) { return (d.cy) })
-  .attr("r", function(d) { return (d.r) })
-  
+    .attr("r", function(d) { return (d.r) })
+ 
+// controls click functionality 
 d3.select("svg").
   	on("click", function() {
     	if (d3.select('input[name="options"]:checked').node().id === "draw") {
@@ -29,10 +70,11 @@ d3.select("svg").
       	    .attr("cy", function(d) { return (d.cy) })
       	    .attr("r", function(d) { return (d.r) })
             drag_methods(d3.selectAll("circle"))
-            drag_methods(d3.selectAll("rect")) // let's just see where this goes
+            drag_methods(d3.selectAll("rect")) 
         }
     });
-  
+ 
+ // drag functionality implementation 
  var deltaX, deltaY;
  var drag_methods = d3.drag()
     .on("start", function() {
@@ -70,15 +112,15 @@ d3.select("svg").
  	.on("drag", function(d) {
   	if (d3.select('input[name="options"]:checked').node().id === "drag"){
   	    if (d3.select(this).node().tagName === "circle") {
-    	d3.select(this)
-    	    .attr("cx", d3.event.x)
-            .attr("cy", d3.event.y)
+    	d3.select(this) // Instead of using width and height use a resolution that can be changed according to the level of zoom
+    	    .attr("cx", Math.ceil(d3.event.x/resolution) * resolution) // Math.round(d3.event.x/(width/numTicks)) * (width/numTicks) )
+            .attr("cy", Math.ceil(d3.event.y/resolution) * resolution) // Math.round(d3.event.y/(height/numTicks)) * (height/numTicks) )
             .classed("selected", true);
             }
         else {
             d3.select(this)
-                .attr("x", d3.event.x + deltaX)
-                .attr("y", d3.event.y + deltaY)
+                .attr("x", Math.ceil((d3.event.x+deltaX)/resolution) * resolution) //Math.round((d3.event.x + deltaX)/(width/numTicks)) * (width/numTicks))
+                .attr("y", Math.ceil((d3.event.y+deltaY)/resolution) * resolution) //Math.round((d3.event.y + deltaY)/(height/numTicks)) * (height/numTicks))
                 .classed("selected", true)
         }
     }
@@ -91,16 +133,17 @@ d3.select("svg").
         if (!active.empty()) {
             var coords = d3.mouse(this)
             var d = { 
-                x: parseInt(active.attr("x"), 10),
-                y: parseInt(active.attr("y"), 10),
+                x: Math.ceil( parseInt(active.attr("x"), 10)/resolution ) * resolution, // parseInt(active.attr("x"), 10) for just pixel by pixel
+                y: Math.ceil( parseInt(active.attr("y"), 10)/resolution ) * resolution,
                 width: parseInt(active.attr("width"), 10),
                 height: parseInt(active.attr("height"), 10)
 
             }
             var distance = {
-                x: coords[0] - d.x,
-                y: coords[1] - d.y
+                x: Math.ceil(((coords[0] - d.x)/resolution)) * resolution, // use just coords[0] - d.x for pixel by pixel transition
+                y: Math.ceil(((coords[1] - d.y)/resolution)) * resolution
             }
+            
             if (distance.x < 1 || (distance.x*2<d.width)) {
                 d.x = coords[0];
                 d.width -= distance.x
@@ -131,6 +174,10 @@ d3.select("svg").
  drag_methods(d3.selectAll("circle"));
  drag_methods(d3.selectAll("rect"));
 
+// round function taken from danasilver example
+function round(p, n) {
+  return p % n < n / 2 ? p - (p % n) : p + n - (p % n);
+}
 
 
 /* 
