@@ -2,7 +2,10 @@
 */
 
 rect.selected {
-    stroke: blue;
+    stroke: #0045ff;
     stroke-dasharray: 2px;
 }
-
+line {
+    stroke: #ffffff;
+    stroke-width: 1px;
+}
