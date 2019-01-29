@@ -10,21 +10,102 @@
     </style>
   </head>
   <body>
-    <h3>My Google Maps Demo</h3>
+    <h3>Garden Locations</h3>
     {% include 'navigation.html' %}
     <!--The div element for the map -->
     <div id="map"></div>
     <script>
-  // Initialize and add the map
-  function initMap() {
-  // The location of Shreveport
-  var shreveport = {lat: 32.4285844596, lng: -93.7042914101};
-  // The map, centered at Uluru
-  var map = new google.maps.Map(
-  document.getElementById('map'), {zoom: 4, center: shreveport});
-  // The marker, positioned at Uluru
-  var marker = new google.maps.Marker({position: shreveport, map: map});
+  
+
+function initMap() {
+    var growToget = {lat: 32.495880, lng: -93.721130};
+    var abPalm = {lat: 32.432420 , lng: -93.747520};
+    var allenDale = {lat: 32.5118782 , lng: -93.7609255};
+    var atkensLibrary = {lat: 32.474670, lng: -93.799300};
+    var highland = {lat: 32.4959914 , lng: -93.7409401};
+    var hollywoodHeights = {lat: 32.456780, lng: -93.816160};
+    var mlkHeath = {lat: 32.492230, lng: -93.748350};
+    var mooretown = {lat: 32.454740, lng: -93.803740};
+    var seedsSuccess = {lat: 32.506960, lng: -93.751410};
+    var valenciaStoner = {lat: 32.496350, lng: -93.720360};
+
+    
+    
+    var map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 11,
+    center: growToget
+  });
+  
+  var contentString = '<div id="content">'+
+      '<div id="siteNotice">'+
+      '</div>'+
+      '<h1 id="firstHeading" class="firstHeading">LSU We Grow Together! Campus</h1>'+
+      '<div id="bodyContent">'+
+      '<p><b>1613 Martha St, Shreveport, LA 71101</b></p>'+
+      '</div>'+
+      '</div>';
+
+  var infowindow = new google.maps.InfoWindow({
+    content: contentString
+  });
+
+  var marker1 = new google.maps.Marker({
+    position: growToget,
+    map: map,
+    title: 'LSU We Grow Together! Campus'
+  });
+  var marker2 = new google.maps.Marker({
+    position: abPalm,
+    map: map,
+    title: 'AB Palmer Community Garden'
+  });
+    var marker3 = new google.maps.Marker({
+    position: allenDale,
+    map: map,
+    title: 'Allendale Garden of Hope and Love'
+  });
+    var marker4 = new google.maps.Marker({
+    position: atkensLibrary,
+    map: map,
+    title: 'Atkins Library Community Garden'
+  });
+    var marker5 = new google.maps.Marker({
+    position: highland,
+    map: map,
+    title: 'Highland Community Garden'
+  });
+    var marker6 = new google.maps.Marker({
+    position: hollywoodHeights,
+    map: map,
+    title: 'Hollywood Heights Community Garden'
+  });
+    var marker7 = new google.maps.Marker({
+    position: mlkHeath,
+    map: map,
+    title: 'MLK Health Clinic Community Garden'
+  });
+    var marker8 = new google.maps.Marker({
+    position: mooretown,
+    map: map,
+    title: 'Mooretown Community Faith Garden'
+  });
+    var marker9 = new google.maps.Marker({
+    position: seedsSuccess,
+    map: map,
+    title: 'Seed to Success Community Garden'
+  });
+    var marker10 = new google.maps.Marker({
+    position: valenciaStoner,
+    map: map,
+    title: 'Valencia Stoner Hill Community Garden'
+  });
+  marker1.addListener('click', function() {
+    infowindow.open(map, marker1);
+  });
 }
+
+        
+        
     </script>
     <!--Load the API from the specified URL
     * The async attribute allows the browser to render the page while the API loads
