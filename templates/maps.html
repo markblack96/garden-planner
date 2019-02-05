@@ -15,6 +15,7 @@
     <!--The div element for the map -->
     <div id="map"></div>
     <script>
+<<<<<<< HEAD
   
 
 function initMap() {
@@ -34,6 +35,40 @@ function initMap() {
     var map = new google.maps.Map(document.getElementById('map'), {
     zoom: 11,
     center: growToget
+=======
+  // Initialize and add the map
+  /**
+  function initMap() {
+  // The location of Shreveport
+  
+      
+  var shreveport = {lat: 32.495880, lng: -93.721130};
+  // The map, centered at Uluru
+  var map = new google.maps.Map(
+  document.getElementById('map'), {zoom: 15, center: shreveport});
+  // The marker, positioned at Uluru
+  //var marker = new google.maps.Marker({position: shreveport, map: map});
+  var map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 4,
+    center: shreveport
+  });
+
+  var marker = new google.maps.Marker({
+    position: shreveport,
+    map: map,
+    title: 'Hello World!'
+  });
+  }
+  **/
+        // This example displays a marker at the center of Australia.
+// When the user clicks the marker, an info window opens.
+
+function initMap() {
+  var shreveport = {lat: 32.495880, lng: -93.721130};
+  var map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 15,
+    center: shreveport
+>>>>>>> master
   });
   
   var contentString = '<div id="content">'+
@@ -49,6 +84,7 @@ function initMap() {
     content: contentString
   });
 
+<<<<<<< HEAD
   var marker1 = new google.maps.Marker({
     position: growToget,
     map: map,
@@ -101,6 +137,15 @@ function initMap() {
   });
   marker1.addListener('click', function() {
     infowindow.open(map, marker1);
+=======
+  var marker = new google.maps.Marker({
+    position: shreveport,
+    map: map,
+    title: 'LSU We Grow Together! Campus'
+  });
+  marker.addListener('click', function() {
+    infowindow.open(map, marker);
+>>>>>>> master
   });
 }
 
