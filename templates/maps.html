@@ -15,10 +15,7 @@
     <!--The div element for the map -->
     <div id="map"></div>
     <script>
-<<<<<<< HEAD
-  
-
-function initMap() {
+  function initMap() {
     var growToget = {lat: 32.495880, lng: -93.721130};
     var abPalm = {lat: 32.432420 , lng: -93.747520};
     var allenDale = {lat: 32.5118782 , lng: -93.7609255};
@@ -29,46 +26,11 @@ function initMap() {
     var mooretown = {lat: 32.454740, lng: -93.803740};
     var seedsSuccess = {lat: 32.506960, lng: -93.751410};
     var valenciaStoner = {lat: 32.496350, lng: -93.720360};
-
     
     
     var map = new google.maps.Map(document.getElementById('map'), {
     zoom: 11,
     center: growToget
-=======
-  // Initialize and add the map
-  /**
-  function initMap() {
-  // The location of Shreveport
-  
-      
-  var shreveport = {lat: 32.495880, lng: -93.721130};
-  // The map, centered at Uluru
-  var map = new google.maps.Map(
-  document.getElementById('map'), {zoom: 15, center: shreveport});
-  // The marker, positioned at Uluru
-  //var marker = new google.maps.Marker({position: shreveport, map: map});
-  var map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 4,
-    center: shreveport
-  });
-
-  var marker = new google.maps.Marker({
-    position: shreveport,
-    map: map,
-    title: 'Hello World!'
-  });
-  }
-  **/
-        // This example displays a marker at the center of Australia.
-// When the user clicks the marker, an info window opens.
-
-function initMap() {
-  var shreveport = {lat: 32.495880, lng: -93.721130};
-  var map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 15,
-    center: shreveport
->>>>>>> master
   });
   
   var contentString = '<div id="content">'+
@@ -79,12 +41,9 @@ function initMap() {
       '<p><b>1613 Martha St, Shreveport, LA 71101</b></p>'+
       '</div>'+
       '</div>';
-
   var infowindow = new google.maps.InfoWindow({
     content: contentString
   });
-
-<<<<<<< HEAD
   var marker1 = new google.maps.Marker({
     position: growToget,
     map: map,
@@ -137,18 +96,8 @@ function initMap() {
   });
   marker1.addListener('click', function() {
     infowindow.open(map, marker1);
-=======
-  var marker = new google.maps.Marker({
-    position: shreveport,
-    map: map,
-    title: 'LSU We Grow Together! Campus'
-  });
-  marker.addListener('click', function() {
-    infowindow.open(map, marker);
->>>>>>> master
   });
 }
-
         
         
     </script>
