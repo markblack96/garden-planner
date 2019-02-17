@@ -14,40 +14,55 @@
     {% include 'navigation.html' %}
     <!--The div element for the map -->
     <div id="map"></div>
+    <!-- calling globals for global variables for map page -->
+    <script type="text/javascript" src= "../static/scripts/global.js"></script>
     <script>
   function initMap() {
-    var growToget = {lat: 32.495880, lng: -93.721130};
-    var abPalm = {lat: 32.432420 , lng: -93.747520};
-    var allenDale = {lat: 32.5118782 , lng: -93.7609255};
-    var atkensLibrary = {lat: 32.474670, lng: -93.799300};
-    var highland = {lat: 32.4959914 , lng: -93.7409401};
-    var hollywoodHeights = {lat: 32.456780, lng: -93.816160};
-    var mlkHeath = {lat: 32.492230, lng: -93.748350};
-    var mooretown = {lat: 32.454740, lng: -93.803740};
-    var seedsSuccess = {lat: 32.506960, lng: -93.751410};
-    var valenciaStoner = {lat: 32.496350, lng: -93.720360};
-    
-    
+
     var map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 11,
+    zoom: 10,
     center: growToget
   });
+      
   
-  var contentString = '<div id="content">'+
-      '<div id="siteNotice">'+
-      '</div>'+
-      '<h1 id="firstHeading" class="firstHeading">LSU We Grow Together! Campus</h1>'+
-      '<div id="bodyContent">'+
-      '<p><b>1613 Martha St, Shreveport, LA 71101</b></p>'+
-      '</div>'+
-      '</div>';
-  var infowindow = new google.maps.InfoWindow({
-    content: contentString
-  });
+  
+var infowindow1 = new google.maps.InfoWindow({
+    content: contentStringShreve[0]
+    });
+var infowindow2 = new google.maps.InfoWindow({
+    content: contentStringShreve[1]
+    });
+var infowindow3 = new google.maps.InfoWindow({
+    content: contentStringShreve[2]
+    });
+var infowindow4 = new google.maps.InfoWindow({
+    content: contentStringShreve[3]
+    });
+var infowindow5 = new google.maps.InfoWindow({
+    content: contentStringShreve[4]
+    });
+var infowindow6 = new google.maps.InfoWindow({
+    content: contentStringShreve[5]
+    });
+var infowindow7 = new google.maps.InfoWindow({
+    content: contentStringShreve[6]
+    });
+var infowindow8 = new google.maps.InfoWindow({
+    content: contentStringShreve[7]
+    });
+var infowindow9 = new google.maps.InfoWindow({
+    content: contentStringShreve[8]
+    });
+var infowindow10 = new google.maps.InfoWindow({
+    content: contentStringShreve[9]
+    });
+      
   var marker1 = new google.maps.Marker({
     position: growToget,
     map: map,
     title: 'LSU We Grow Together! Campus'
+    
+    
   });
   var marker2 = new google.maps.Marker({
     position: abPalm,
@@ -94,9 +109,36 @@
     map: map,
     title: 'Valencia Stoner Hill Community Garden'
   });
-  marker1.addListener('click', function() {
-    infowindow.open(map, marker1);
-  });
+      marker1.addListener('click', function() {
+        infowindow1.open(map, marker1);
+        });
+      marker2.addListener('click', function() {
+        infowindow2.open(map, marker2);
+        });
+      marker3.addListener('click', function() {
+        infowindow3.open(map, marker3);
+        });
+      marker4.addListener('click', function() {
+        infowindow4.open(map, marker4);
+        });
+      marker5.addListener('click', function() {
+        infowindow5.open(map, marker5);
+        });
+      marker6.addListener('click', function() {
+        infowindow6.open(map, marker6);
+        });
+      marker7.addListener('click', function() {
+        infowindow7.open(map, marker7);
+        });
+      marker8.addListener('click', function() {
+        infowindow8.open(map, marker8);
+        });
+      marker9.addListener('click', function() {
+        infowindow9.open(map, marker9);
+        });
+      marker10.addListener('click', function() {
+        infowindow10.open(map, marker10);
+        });
 }
         
         
