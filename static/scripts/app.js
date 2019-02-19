@@ -57,10 +57,10 @@ svg.selectAll("circle").data(circles).enter().append("circle")
 // controls click functionality 
 d3.select("svg").
   	on("click", function() {
+	    var coords = d3.mouse(this);
     	if (d3.select('input[name="options"]:checked').node().id === "draw") {
-    	    var coords = d3.mouse(this);
             console.log(coords);
-            new_circle = {cx: coords[0], cy: coords[1], r: 25};
+            var new_circle = {cx: coords[0], cy: coords[1], r: 25};
             circles.push(new_circle);
             console.log(circles);
             svg.selectAll("circle")
@@ -69,13 +69,19 @@ d3.select("svg").
             .attr( "cx", function(d) { return (d.cx) })
       	    .attr("cy", function(d) { return (d.cy) })
       	    .attr("r", function(d) { return (d.r) })
+			.on("mouseover", mouseOverHandler).on("mouseout", mouseOutHandler)
             drag_methods(d3.selectAll("circle"))
             drag_methods(d3.selectAll("rect")) 
         }
-    });
+		else if (d3.select('input[name="options"]:checked').node().id === "draw_plot") {
+			var new_plot = {x: coords[0], y: coords[1]}; // temporary data, we should prob move this to the end
+			console.log(new_plot);
+		}
+    }); // above, we add a bunch of methods to each new circle, but there's a better way to do this I'm sure
  
  // drag functionality implementation 
  var deltaX, deltaY;
+ var current_id = 1;
  var drag_methods = d3.drag()
     .on("start", function() {
         // DRAW_PLOT FUNCTION
@@ -83,6 +89,7 @@ d3.select("svg").
             console.log("Test 1!");
             var coords = d3.mouse(this);
             var plot_data = {
+				id: current_id,
                 x: coords[0],
                 y: coords[1],
                 width: 0,
@@ -97,7 +104,8 @@ d3.select("svg").
                 .attr("y", function(d) { return d.y })
                 .attr("class", function(d) { return d.class })
                 .attr("width", 0)
-                .attr("height", 0);
+                .attr("height", 0)
+				.on("mouseover", mouseOverHandler).on("mouseout", mouseOutHandler);
             drag_methods(d3.selectAll("rect"));
             console.log("Test 2!");
         }
@@ -141,7 +149,7 @@ d3.select("svg").
             }
             var distance = {
                 x: Math.ceil(((coords[0] - d.x)/resolution)) * resolution, // use just coords[0] - d.x for pixel by pixel transition
-                y: Math.ceil(((coords[1] - d.y)/resolution)) * resolution
+                y: Math.ceil(((coords[1] - d.y)/resolution)) * resolution 
             }
             
             if (distance.x < 1 || (distance.x*2<d.width)) {
@@ -167,12 +175,46 @@ d3.select("svg").
     if (d3.select('input[name="options"]:checked').node().id === "draw_plot") {
         var active = svg.selectAll("rect.plot-active");
         active.attr("class", "plot");
+		// get current plot data
+		var plot_data = plots.find(x => x.id === current_id);
+		plot_data.x = active.attr("x"); plot_data.y = active.attr("y");
+		plot_data.width = active.attr("width");
+		plot_data.height = active.attr("height");
+		plot_data.class = "plot";
+		current_id++;
+		console.log(plot_data);
         console.log("Test 3!");
     }
   });
- drag_methods(d3.selectAll("svg"));
+  drag_methods(d3.selectAll("svg")); // this should probably be refactored but I don't want to look up what the better way to do it is
  drag_methods(d3.selectAll("circle"));
  drag_methods(d3.selectAll("rect"));
+ 
+ 
+ // Our tooltip div
+var div = d3.select("body").append("div")	
+    .attr("class", "tooltip")				
+    .style("opacity", 0);
+ 
+ // Mouse over tool tip
+function mouseOverHandler(d, i) {
+	div.transition()
+	 	.duration(200)
+	 	.style("opacity", .9);
+	 // div.html("Tooltip")
+	div.html("Width: "+d.width+"px")
+		.style("left", (d3.event.pageX) + "px")
+		.style("top", (d3.event.pageY-28) + "px");
+			
+		};
+		
+ 
+ function mouseOutHandler(d, i) {
+ 	div.transition()
+	 	.duration(500)
+	 	.style("opacity", 0);
+ }
+ 
 
 // round function taken from danasilver example
 function round(p, n) {
