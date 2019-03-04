@@ -6,7 +6,10 @@ var height = 480;
 var numTicks = 10; // used later for gridlines and snapping
 var resolution = 20;
 
-var svg = d3.select("#svg-container").append("svg").attr("width", width).attr("height", height);
+var svg = d3.select("#svg-container")
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height);
 
 // Arrays to hold garden plot objects
 var plots = []; 
@@ -55,10 +58,11 @@ svg.selectAll("circle").data(circles).enter().append("circle")
     .attr("r", function(d) { return (d.r) })
  
 // controls click functionality 
-d3.select("svg").
-  	on("click", function() {
+d3.select("svg")
+    .on("click", function() {
 	    var coords = d3.mouse(this);
-    	if (d3.select('input[name="options"]:checked').node().id === "draw") {
+    	if (d3.select('input[name="options"]:checked').node().id === "draw") 
+    	{
             console.log(coords);
             var new_circle = {cx: coords[0], cy: coords[1], r: 25};
             circles.push(new_circle);
@@ -73,12 +77,13 @@ d3.select("svg").
             drag_methods(d3.selectAll("circle"))
             drag_methods(d3.selectAll("rect")) 
         }
-		else if (d3.select('input[name="options"]:checked').node().id === "draw_plot") {
+		else if (d3.select('input[name="options"]:checked').node().id === "draw_plot") 
+		{
 			var new_plot = {x: coords[0], y: coords[1]}; // temporary data, we should prob move this to the end
 			console.log(new_plot);
 		}
-    }); // above, we add a bunch of methods to each new circle, but there's a better way to do this I'm sure
- 
+    });
+    
  // drag functionality implementation 
  var deltaX, deltaY;
  var current_id = 1;
@@ -209,11 +214,12 @@ function mouseOverHandler(d, i) {
 		};
 		
  
- function mouseOutHandler(d, i) {
+function mouseOutHandler(d, i) {
  	div.transition()
 	 	.duration(500)
 	 	.style("opacity", 0);
- }
+}
+
  
 
 // round function taken from danasilver example
