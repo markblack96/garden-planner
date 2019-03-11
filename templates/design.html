@@ -3,11 +3,15 @@
 <title>Garden Planner</title>
 <!-- d3 import -->
 <script src="https://d3js.org/d3.v4.min.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
 <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='styles/main.css')}}">
+<!---
 {% include 'navigation.html' %}
+-->
 <h3>Designer</h3>
+
 <style>
 svg {
   background-color: #f0f0f0;
@@ -16,19 +20,28 @@ svg {
   stroke: black;
   stroke-dasharray: 4px;
   fill: #f0f0f0;
+  pointer-events: all;
 }
 </style>
-<div id="svg-container">
+<div class="container">
+    <div class="row">
+        <div id="svg-container" class="col-8">
 
-</div>
-<div id="options-container">
-<ul id="options">
-<li><input type="radio" name="options" id="drag" checked>Drag</li>
-<li><input type="radio" name="options" id="resize">Resize</li>
-<li><input type="radio" name="options" id="draw">Add new container</li>
-<li><input type="radio" name="options" id="draw_plot">Add new plot</li>
-<li><input type="radio" name="options" id="select">Select feature</li>
-</ul>
+        </div>
+        <div id="options-container" class="col-4">
+            <ul id="options">
+                <li><input type="radio" name="options" id="drag" checked>Drag</li>
+                <li><input type="radio" name="options" id="resize">Resize</li>
+                <li><input type="radio" name="options" id="draw">Add new container</li>
+                <li><input type="radio" name="options" id="draw_plot">Add new plot</li>
+                <li><input type="radio" name="options" id="select">Select feature</li>
+            </ul>
+        </div>
+    </div>
+    <div class="edit-bar">
+        <input id="edit_input" type="text" placeholder="Edit 'contains' value" disabled></input>
+        <input type="submit" id="edit_send" value="Edit" disabled></input>
+    </div>
 </div>
 <script src="{{url_for('static', filename='scripts/app.js')}}"></script>
 </body>
