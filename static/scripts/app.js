@@ -67,7 +67,7 @@ d3.select("svg")
     	if (d3.select('input[name="options"]:checked').node().id === "draw") 
     	{
             console.log(coords);
-            var new_circle = {cx: coords[0], cy: coords[1], r: 25, id: current_id, selected: false, contains: null};
+            var new_circle = {cx: coords[0], cy: coords[1], r: 25, id: "i" + current_id, selected: false, contains: null}; // numeric id's are wonky, i# is the format
             circles.push(new_circle);
             console.log(circles);
             svg.selectAll("circle")
@@ -102,7 +102,7 @@ d3.select("svg")
             console.log("Test 1!");
             var coords = d3.mouse(this);
             var plot_data = {
-				id: current_id,
+				id: "i" + current_id,
                 x: coords[0],
                 y: coords[1],
                 width: 0,
@@ -117,6 +117,7 @@ d3.select("svg")
                 .append("rect")
                 .attr("x", function(d) { return d.x })
                 .attr("y", function(d) { return d.y })
+                .attr("id", function(d) { return "i" + current_id } )
                 .attr("class", function(d) { return d.class })
                 .attr("width", 0)
                 .attr("height", 0)
@@ -193,7 +194,7 @@ d3.select("svg")
         var active = svg.selectAll("rect.plot-active");
         active.attr("class", "plot");
 		// get current plot data
-		var plot_data = plots.find(x => x.id === current_id);
+		var plot_data = plots.find(x => x.id === "i" + current_id);
 		plot_data.x = active.attr("x"); plot_data.y = active.attr("y");
 		plot_data.width = active.attr("width");
 		plot_data.height = active.attr("height");
@@ -219,7 +220,7 @@ function mouseOverHandler(d, i) {
 	 	.duration(200)
 	 	.style("opacity", .9);
 	 // div.html("Tooltip")
-	div.html("Contains: "+d.contains)
+	div.html("Contains: "+d.contains )
 		.style("left", (d3.event.pageX) + "px")
 		.style("top", (d3.event.pageY-28) + "px");
 			
@@ -231,11 +232,14 @@ function mouseOutHandler(d, i) {
 	 	.style("opacity", 0);
 }
 
-function select_handler(d) { // i herd u leik spaghet cöd
+function select_handler(d) { 
     var edit_input = document.getElementById('edit_input');
     var edit_send = document.getElementById('edit_send');
-    
+    var edit_delete = document.getElementById('edit_delete');
+    if (d3.select('input[name="options"]:checked').node().id === 'select')
+    {
     test_edit_input = edit_input;
+    
     
 	if (!d.selected) {
         d.selected = true;
@@ -244,11 +248,18 @@ function select_handler(d) { // i herd u leik spaghet cöd
         // open edit div
         edit_input.disabled = false;
         edit_send.disabled = false;
+        edit_delete.disabled = false;
+        
         edit_input.value = d.contains;
         d3.select('#edit_send').on("click", function() {
             d.contains = edit_input.value;
             console.log("If you see this it might work: " + d.contains);
         });	
+        d3.select('#edit_delete').on("click", function() {
+            // delete the selected element and associated data
+            d3.select("#" + d.id).remove();
+            plots.pop("#i" + d.id);
+        });
 	}
 	else
 	{
@@ -256,5 +267,7 @@ function select_handler(d) { // i herd u leik spaghet cöd
 	    d3.select(this).classed("selected", d.selected);
 	    document.getElementById('edit_input').disabled = true;
         document.getElementById('edit_send').disabled = true;
+        document.getElementById('edit_delete').disabled = true;
 	}
+}
 }
