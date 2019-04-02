@@ -3,7 +3,6 @@ var selected_option = d3.select("input[name='options']:checked").property('value
 
 var width = 640;
 var height = 480;
-// var numTicks = 10; // used later for gridlines and snapping
 var resolution = 20;
 
 var svg = d3.select("#svg-container")
@@ -11,100 +10,109 @@ var svg = d3.select("#svg-container")
                 .attr("width", width)
                 .attr("height", height);
 
+var g = svg.append("g");
+
+var background = g.append("rect")
+                .attr("width", width)
+                .attr("height", height)
+                .attr("class", "background");
+                
 // Arrays to hold garden plot objects
 var plots = [];
 var circles = [];
 
+// Scales and axes for grid
+var x = d3.scaleLinear()
+    .domain([0, 32])
+    .range([-1, 640+1]);
 
-// Alternative to scale: just add a bunch of lines on the fly
-svg.selectAll('.vertical')
-    .data(d3.range(1, width/resolution)).enter().append("line")
-    .attr('class', 'vertical')
-    .attr('x1', function(d) { return d * resolution; })
-    .attr('y1', 0)
-    .attr('x2', function(d) { return d * resolution; })
-    .attr('y2', height)
-    .attr('stroke', '#000').attr('shapeRendering', 'crispEdges');
-    
-svg.selectAll('.horizontal')
-    .data(d3.range(1, height / resolution))
-  .enter().append('line')
-    .attr('class', 'horizontal')
-    .attr('x1', 0)
-    .attr('y1', function(d) { return d * resolution; })
-    .attr('x2', width)
-    .attr('y2', function(d) { return d * resolution; })
-    .attr('stroke', '#000').attr('shapeRendering', 'crispEdges');
+var y = d3.scaleLinear()
+    .domain([0, 48])
+    .range([-1, 480 + 1]);
 
-// Define scales and axes for grid
-//var x_scale = d3.scaleLinear().domain([0, 100]).range([0, width]);
-// var y_scale = d3.scaleLinear().domain([0, 100]).range([height, 0]);
+var xAxis = d3.axisBottom(x)
+        .ticks((640 + 2)/(480 + 2) * 20)
+        .tickSize(480)
+        .tickPadding(8 - 480);
 
-/*var x_gridlines = d3.axisTop()
-                    .tickFormat("") // no ticks
-                    .tickSize(-height) // tick all the way to bottom of the screen
-                    .scale(x_scale).ticks(numTicks);
-  */                  
-// var y_gridlines = d3.axisLeft().tickFormat("").tickSize(-width).scale(y_scale).ticks(numTicks);
-                    
-// add gridlines
-// svg.append("g").attr("class", "grid").call(x_gridlines);
-// svg.append("g").attr("class", "grid").call(y_gridlines);
+var yAxis = d3.axisRight(y)
+    .ticks(20)
+    .tickSize(640)
+    .tickPadding(8 - 640);
+
+var gX = g.append("g")
+    .attr("class", "axis axis--x")
+    .attr("fill", "#000")
+    .call(xAxis);
+
+var gY = g.append("g")
+    .attr("class", "axis axis--y")
+    .call(yAxis);
+
+
+
+svg.call(d3.zoom()
+    .scaleExtent([1/2, 8])
+    .on("zoom", zoomed));
+
+function zoomed() {
+    if (d3.select('input[name="options"]:checked').node().id === "select")
+        g.attr("transform", d3.event.transform);
+        // gX.call(xAxis.scale(d3.event.transform.rescaleX()));
+        // gY.call(xAxis.scale(d3.event.transform.rescaleX()));
+}
 
 // adds circles from circle data
-svg.selectAll("circle").data(circles).enter().append("circle")
+g.selectAll("circle").data(circles).enter().append("circle")
 	.attr("cx", function(d) { return (d.cx) })
 	.attr("cy", function(d) { return (d.cy) })
     .attr("r", function(d) { return (d.r) })
+    .attr("class", "pot");
  
 // controls click functionality for svg element
 
 var selected_element;
-
-d3.select("svg")
-    .on("click", function() {
-	    var coords = d3.mouse(this);
+    
+ // drag functionality implementation 
+ var deltaX, deltaY;
+ var current_id = 1;
+ var debugger_var;
+ var drag_methods = d3.drag()
+    .on("start", function() {
+        // DRAW_PLOT FUNCTION
+        console.log("First real test");
+        debugger_var = d3.select(this);
+        var active;
+        var coords = d3.mouse(this);
     	if (d3.select('input[name="options"]:checked').node().id === "draw") 
     	{
             console.log(coords);
             var new_circle = {cx: coords[0], cy: coords[1], r: 25, id: "i" + current_id, selected: false, contains: null}; // numeric id's are wonky, i# is the format
             circles.push(new_circle);
             console.log(circles);
-            svg.selectAll("circle")
+            g.selectAll("circle")
       	        .data(circles).enter()
       	        .append("circle")
                 .attr( "cx", function(d) { return (d.cx) })
       	        .attr("cy", function(d) { return (d.cy) })
       	        .attr("r", function(d) { return (d.r) })
       	        .attr("id", function(d) { return (d.id) })
+      	        .attr("class", "pot")
       	        .attr("contains", function(d) { return (d.contains) })
 			    .on("mouseover", mouseOverHandler).on("mouseout", mouseOutHandler)
 			    .on("click", select_handler);
             drag_methods(d3.selectAll("circle"));
-            drag_methods(d3.selectAll("rect"));
+            
             current_id++;
         }
-		else if (d3.select('input[name="options"]:checked').node().id === "draw_plot") 
-		{
-			var new_plot = {x: coords[0], y: coords[1]}; // temporary data, we should prob move this to the end
-			console.log(new_plot);
-		}
-		
-    });
-    
- // drag functionality implementation 
- var deltaX, deltaY;
- var current_id = 1;
- var drag_methods = d3.drag()
-    .on("start", function() {
-        // DRAW_PLOT FUNCTION
+        
+        
         if (d3.select('input[name="options"]:checked').node().id === "draw_plot") {
-            console.log("Test 1!");
             var coords = d3.mouse(this);
             var plot_data = {
 				id: "i" + current_id,
-                x: coords[0],
-                y: coords[1],
+                x: Math.ceil(((coords[0])/resolution)) * resolution,
+                y: Math.ceil(((coords[1])/resolution)) * resolution,
                 width: 0,
                 height: 0,
                 class: "plot-active",
@@ -113,9 +121,9 @@ d3.select("svg")
             };
 
             plots.push(plot_data); // push new plot into plots
-            svg.selectAll("rect").data(plots).enter()
+            g.selectAll("rect").data(plots).enter()
                 .append("rect")
-                .attr("x", function(d) { return d.x })
+                .attr("x", function(d) { return d.x }) 
                 .attr("y", function(d) { return d.y })
                 .attr("id", function(d) { return "i" + current_id } )
                 .attr("class", function(d) { return d.class })
@@ -124,11 +132,11 @@ d3.select("svg")
 				.on("mouseover", mouseOverHandler)
 				.on("mouseout", mouseOutHandler)
 				.on("click", select_handler);
-            drag_methods(d3.selectAll("rect"));
-            console.log("Test 2!");
+            drag_methods(d3.selectAll(".plot-active"));
         }
         // DRAG
         if (d3.select('input[name="options"]:checked').node().id === "drag") {
+//            && d3.select(this).attr("class") !== "background") {
             var current = d3.select(this)
             deltaX = current.attr("x") - d3.event.x;
             deltaY = current.attr("y") - d3.event.y;
@@ -138,15 +146,15 @@ d3.select("svg")
  	.on("drag", function(d) {
       	if (d3.select('input[name="options"]:checked').node().id === "drag"){
       	    if (d3.select(this).node().tagName === "circle") {
-        	d3.select(this) // Instead of using width and height use a resolution that can be changed according to the level of zoom
-        	    .attr("cx", Math.ceil(d3.event.x/resolution) * resolution) // Math.round(d3.event.x/(width/numTicks)) * (width/numTicks) )
-                .attr("cy", Math.ceil(d3.event.y/resolution) * resolution) // Math.round(d3.event.y/(height/numTicks)) * (height/numTicks) )
+        	d3.select(this)
+        	    .attr("cx", Math.ceil(d3.event.x/resolution) * resolution)
+                .attr("cy", Math.ceil(d3.event.y/resolution) * resolution)
                 .classed("selected", true);
                 }
             else {
                 d3.select(this)
-                    .attr("x", Math.ceil((d3.event.x+deltaX)/resolution) * resolution) //Math.round((d3.event.x + deltaX)/(width/numTicks)) * (width/numTicks))
-                    .attr("y", Math.ceil((d3.event.y+deltaY)/resolution) * resolution) //Math.round((d3.event.y + deltaY)/(height/numTicks)) * (height/numTicks))
+                    .attr("x", Math.ceil((d3.event.x+deltaX)/resolution) * resolution)
+                    .attr("y", Math.ceil((d3.event.y+deltaY)/resolution) * resolution)
                     .classed("selected", true)
             }
         }
@@ -155,7 +163,7 @@ d3.select("svg")
 			    d3.select(this).attr("r", d3.event.x)
         }
         else if (d3.select('input[name="options"]:checked').node().id === "draw_plot") {
-            var active = svg.select("rect.plot-active");
+            active = g.select("rect.plot-active");
             if (!active.empty()) {
                 var coords = d3.mouse(this)
                 var d = { 
@@ -191,7 +199,7 @@ d3.select("svg")
   	d3.select(this).classed("selected", false);
   	
     if (d3.select('input[name="options"]:checked').node().id === "draw_plot") {
-        var active = svg.selectAll("rect.plot-active");
+        active = g.selectAll("rect.plot-active");
         active.attr("class", "plot");
 		// get current plot data
 		var plot_data = plots.find(x => x.id === "i" + current_id);
@@ -204,9 +212,8 @@ d3.select("svg")
         console.log("Test 3!");
     }
   });
- drag_methods(d3.selectAll("svg")); // this should probably be refactored but I don't want to look up what the better way to do it is
- drag_methods(d3.selectAll("circle"));
- drag_methods(d3.selectAll("rect"));
+ svg.call(drag_methods);
+ drag_methods(g);
  
  
  // Our tooltip div

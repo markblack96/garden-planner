@@ -1,11 +1,41 @@
 /* CSS for svg elements
 */
-
-rect.selected {
-    stroke: #0045ff;
-    stroke-dasharray: 2px;
+svg {
+  background-color: #fefffe;
+}
+.plot {
+  fill: #d0f0c0;
+  stroke: #000;
+  stroke-width: 1px;
+}
+.plot-active {
+  fill: #d0f0c0;
+  opacity: 0.89;
+}
+.pot {
+  fill: #d0f0c0;
+  stroke: #000;
+  stroke-width: 1px;
+}
+.selected {
+  stroke: black;
+  stroke-dasharray: 4px;
+  fill: #f0f0f0;
+  pointer-events: all;
+  opacity: 0.89;
 }
 line {
-    stroke: #ffffff;
+    stroke: #000;
     stroke-width: 1px;
+    shape-rendering: crispEdges;
+}
+svg rect line {
+    stroke: #000;
+    stroke-width: 1px;
+    shape-rendering: crispEdges;
+}
+.background {
+    opacity: 0;
+    pointer-events: all;
+    fill: #f0f0f0;
 }
